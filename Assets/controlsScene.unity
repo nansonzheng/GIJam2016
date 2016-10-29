@@ -126,6 +126,7 @@ MonoBehaviour:
   pushingMultiplierForward: 2
   isPushing: 0
   ctrlThresh: 1
+  crashThresh: 1
   scale: {x: 0, y: 0}
 --- !u!61 &152794096
 BoxCollider2D:
@@ -216,6 +217,7 @@ GameObject:
   - 92: {fileID: 282558251}
   - 124: {fileID: 282558250}
   - 81: {fileID: 282558249}
+  - 114: {fileID: 282558254}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -291,6 +293,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &282558254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 282558248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68098b715177cb4fb46d68dcea8f752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  widthOfCollider: 2
+  z_axis: 0
 --- !u!1 &499245706
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1d2ed00337c9c40a3c82dbfabdee4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   debugMoveSpd: 10
 --- !u!61 &499245708
 BoxCollider2D:
@@ -346,7 +361,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 499245706}
   m_UseAutoMass: 0
   m_Mass: 70
-  m_LinearDrag: 0.5
+  m_LinearDrag: 0.2
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_IsKinematic: 0
@@ -436,6 +451,7 @@ MonoBehaviour:
   pushingMultiplierForward: 2
   isPushing: 0
   ctrlThresh: 1
+  crashThresh: 1
   scale: {x: 0, y: 0}
 --- !u!61 &953377182
 BoxCollider2D:
@@ -555,8 +571,8 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1135115906}
   m_UseAutoMass: 0
-  m_Mass: 100
-  m_LinearDrag: 0.5
+  m_Mass: 70
+  m_LinearDrag: 0.2
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_IsKinematic: 0
@@ -604,7 +620,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1135115906}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.68, y: 3.12, z: 0}
+  m_LocalPosition: {x: 0.97, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []

@@ -22,12 +22,16 @@ public class Controls : MonoBehaviour {
     public Vector2 scale;
 
     Vector2 direction;
+    float directionF;
     Vector2 vPrev;
+
+    Animator ani;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         scale = Vector2.one;
+        ani = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -51,6 +55,18 @@ public class Controls : MonoBehaviour {
                 direction.y = Input.GetAxis("Vertical4");
                 break;
         }
+        if (direction != Vector2.zero) {
+            directionF = Vector2.Angle(Vector2.up, direction);
+        // If going left, need to add 180 to get actual angle
+        if (direction.x < 0)
+        {
+            directionF = 360 - directionF;
+        }
+        // Divide to get number in range of 0 to 8, mod to get nearest int
+        directionF = (Mathf.Round(directionF / 45)) % 8;
+        }
+        
+            
         //rb.velocity = direction * speed;
         vPrev = rb.velocity;
         if (!isPushing)
@@ -84,7 +100,10 @@ public class Controls : MonoBehaviour {
                 rb.velocity = direction * speed;
             }
         }
-	}
+
+        // Uncomment when ready
+        //setAnimVars();
+    }
 
     // TODO: LayerMask for different objects
     void OnCollisionEnter2D(Collision2D col) {
@@ -152,5 +171,11 @@ public class Controls : MonoBehaviour {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
         Destroy(gameObject, 5f);
+    }
+
+    void setAnimVars()
+    {
+        ani.SetFloat("movSpeed", rb.velocity.magnitude);
+        
     }
 }
