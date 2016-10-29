@@ -5,6 +5,8 @@ public class PushedBehaviour : MonoBehaviour {
 
     Rigidbody2D rb;
     GameObject pushedBy;
+    public bool debug;
+    public float debugMoveSpd;
 
 	// Use this for initialization
 	void Start () {
@@ -14,7 +16,12 @@ public class PushedBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
+	    if (debug)
+        {
+            Vector2 move = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+            if (move != Vector2.zero)
+            rb.velocity = move;
+        }
 	}
 
     void OnCollisionEnter2D(Collision2D col)
