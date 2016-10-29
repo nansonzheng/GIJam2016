@@ -103,7 +103,6 @@ public class Controls : MonoBehaviour {
 
         // Uncomment when ready
         setAnimVars();
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
     }
 
     // TODO: LayerMask for different objects

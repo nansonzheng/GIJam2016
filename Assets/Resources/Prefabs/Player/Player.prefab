@@ -41,6 +41,8 @@ GameObject:
   - 50: {fileID: 50000012457224562}
   - 61: {fileID: 61000012579344732}
   - 114: {fileID: 114000010376154000}
+  - 114: {fileID: 114000013364775970}
+  - 114: {fileID: 114000013931623660}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -103,9 +105,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0046, y: -0.45}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.66, y: 0.2}
 --- !u!95 &95000011874767472
 Animator:
   serializedVersion: 3
@@ -155,6 +157,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset_from_screen: 1
   playerNum: 1
+--- !u!114 &114000013364775970
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013578016758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 867fe402e90a0ec4c9c9280c03212079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player1: {r: 0.9233266, g: 1, b: 0.20588237, a: 1}
+  player2: {r: 0.3897059, g: 1, b: 0.3939148, a: 1}
+  player3: {r: 0.47794116, g: 1, b: 1, a: 1}
+  player4: {r: 1, g: 0.49264705, b: 0.8600405, a: 1}
+  chaotic: 0
+--- !u!114 &114000013931623660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013578016758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64030027e2362ac42bb4c43b90903cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212000013797231982
 SpriteRenderer:
   m_ObjectHideFlags: 1
