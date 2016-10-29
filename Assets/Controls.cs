@@ -23,7 +23,7 @@ public class Controls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
-        scale = new Vector2(1, 1);
+        scale = Vector2.one;
 	}
 	
 	// Update is called once per frame
