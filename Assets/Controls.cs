@@ -102,7 +102,7 @@ public class Controls : MonoBehaviour {
         }
 
         // Uncomment when ready
-        //setAnimVars();
+        setAnimVars();
     }
 
     // TODO: LayerMask for different objects
@@ -176,6 +176,6 @@ public class Controls : MonoBehaviour {
     void setAnimVars()
     {
         ani.SetFloat("movSpeed", rb.velocity.magnitude);
-        
+        ani.SetFloat("direction", directionF);
     }
 }
