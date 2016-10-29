@@ -3,7 +3,9 @@ using System.Collections;
 
 public class cameraBehaviour : MonoBehaviour {
 
+	public GameObject refObj; 
 	public float colliderMargin = 2f; //This is collider offset from camera view
+	public float cameraSpeedModifier = 2f; //Camera Speed
 
 	private Camera camera;
 	private Vector2 cameraPos;
@@ -16,6 +18,7 @@ public class cameraBehaviour : MonoBehaviour {
 
 	private GameObject margin;	//Margin for camera moving
 
+	private bool moveCamera = true;
 	// Use this for initialization
 	void Start () {
 		//Get camera size and position
@@ -23,16 +26,17 @@ public class cameraBehaviour : MonoBehaviour {
 		cameraPos = transform.position;
 		cameraSize.x = Vector2.Distance (camera.ScreenToWorldPoint(new Vector2(0,0)),camera.ScreenToWorldPoint(new Vector2(Screen.width, 0)));
 		cameraSize.y = Vector2.Distance (camera.ScreenToWorldPoint(new Vector2(0,0)),camera.ScreenToWorldPoint(new Vector2(0, Screen.height))); 
+	
 
 		//Init colliders
 		limitColliderTop = gameObject.AddComponent<BoxCollider2D>();
 		limitColliderRight = gameObject.AddComponent<BoxCollider2D>();
 		limitColliderBottom = gameObject.AddComponent<BoxCollider2D>();
 		limitColliderLeft = gameObject.AddComponent<BoxCollider2D>();
-		 
+
 		margin = new GameObject("margin");
 		margin.transform.parent = gameObject.transform;  
-		//margin = gameObject.AddComponent<BoxCollider2D>();
+
 
 		//Set the collider positions
 		limitColliderTop.offset = new Vector2(0, cameraSize.y * 0.5f+ colliderMargin * 0.5f) + cameraPos;
@@ -47,11 +51,32 @@ public class cameraBehaviour : MonoBehaviour {
 		limitColliderLeft.offset = new Vector2(-1 * cameraSize.x * 0.5f - colliderMargin * 0.5f, 0) + cameraPos;
 		limitColliderLeft.size = new Vector2 (colliderMargin, cameraSize.y);
 
-		//margin.size = new Vector2 (cameraSize.x * 0.5f, cameraSize.y * 0.5f);
+		BoxCollider2D marginCollider = margin.gameObject.AddComponent<BoxCollider2D>();
+		marginCollider.isTrigger = true;
+		marginCollider.size = new Vector2 (cameraSize.x * 0.5f, cameraSize.y * 0.5f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (moveCamera) {
+			Vector3 refVelocity = refObj.transform.position - transform.position;
+			//GetComponent<Rigidbody2D>().velocity = new Vector2(refVelocity.x * cameraSpeed, refVelocity.y * cameraSpeed);  
+			GetComponent<Rigidbody2D>().velocity = refVelocity * cameraSpeedModifier;
+		}
 	}
+
+	/*
+	void OnTriggerExit2D(Collider2D col){
+		GameObject reference = col.gameObject;
+		if (reference == refObj) {
+			moveCamera = true;
+		}
+		Debug.Log ("Not Colliding");
+	}
+
+
+	void OnTriggerStay2D(Collider2D col){
+		moveCamera = false;
+		Debug.Log ("Colliding");
+	}*/
 }
