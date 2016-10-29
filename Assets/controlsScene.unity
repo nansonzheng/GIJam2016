@@ -445,7 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f618c91c16747ee4b97d9c6eb3246fd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNum: 1
+  playerNum: 3
   speed: 5
   pushingMultiplierSide: 0.4
   pushingMultiplierForward: 2
