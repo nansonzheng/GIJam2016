@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 953951641}
   - 212: {fileID: 953951642}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: efabc1926cb9b9b4995aef15e1af8477, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49803922, g: 0.9764706, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!1 &1212454602
@@ -326,7 +326,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -373,7 +373,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1285539253}
   - 212: {fileID: 1285539254}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OuterWalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +423,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300002, guid: efabc1926cb9b9b4995aef15e1af8477, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49872094, g: 0.978, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!1 &1405296325
@@ -485,6 +485,6 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300004, guid: efabc1926cb9b9b4995aef15e1af8477, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49803922, g: 0.9764706, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
