@@ -102,7 +102,7 @@ public class Controls : MonoBehaviour {
         }
 
         // Uncomment when ready
-        //setAnimVars();
+        setAnimVars();
     }
 
     // TODO: LayerMask for different objects
