@@ -176,6 +176,6 @@ public class Controls : MonoBehaviour {
     void setAnimVars()
     {
         ani.SetFloat("movSpeed", rb.velocity.magnitude);
-        
+        ani.SetFloat("direction", directionF);
     }
 }
