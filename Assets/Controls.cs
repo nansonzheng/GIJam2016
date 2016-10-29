@@ -1,24 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Controls : MonoBehaviour {
 
     public enum Player {
         Player1,
         Player2,
-        Player3
+        Player3,
+        Player4
     }
 
     public Player playerNum;
     public float speed;
     public float pushingMultiplierSide, pushingMultiplierForward;
     public bool isPushing;
-    public float ctrlThresh;
-    Rigidbody2D rb, pushed;
+    public float ctrlThresh, crashThresh;
+    Rigidbody2D rb;
+    Rigidbody2D pushed;
     Vector2 attachNormal;
     public Vector2 scale;
 
     Vector2 direction;
+    Vector2 vPrev;
 
 	// Use this for initialization
 	void Start () {
@@ -42,9 +46,13 @@ public class Controls : MonoBehaviour {
                 direction.x = Input.GetAxis("Horizontal3");
                 direction.y = Input.GetAxis("Vertical3");
                 break;
+            case Player.Player4:
+                direction.x = Input.GetAxis("Horizontal4");
+                direction.y = Input.GetAxis("Vertical4");
+                break;
         }
         //rb.velocity = direction * speed;
-        
+        vPrev = rb.velocity;
         if (!isPushing)
         {
             rb.velocity = direction * speed;
@@ -52,12 +60,12 @@ public class Controls : MonoBehaviour {
         else
         {
             // Determine if movement is to push block
-            float pushDiff = Mathf.Abs(Vector2.Angle(attachNormal, direction));
-            Debug.Log("pushDifference = " + pushDiff);
+            float pushDiff = Vector2.Angle(attachNormal, direction);
             // Determine if player is being pushed
             // Maybe move this check to pushedbehaviour?
-            float moveDirDiff = Mathf.Abs(Vector2.Angle(attachNormal, rb.velocity));
-            Debug.Log("moveDirDiff = " + moveDirDiff);
+            float moveDirDiff = Vector2.Angle(attachNormal, rb.velocity);
+
+            //Debug.Log("pushDiff " + pushDiff + ", moveDirDiff " + moveDirDiff);
             // Input to move against block
             if (pushDiff >= 135)
             {
@@ -75,15 +83,17 @@ public class Controls : MonoBehaviour {
             {
                 rb.velocity = direction * speed;
             }
-        }      
+        }
 	}
 
+    // TODO: LayerMask for different objects
     void OnCollisionEnter2D(Collision2D col) {
-        if (!isPushing) {
-            // TODO: Check collided object is wall or playblock
+        if (!isPushing && col.rigidbody != null)
+        {
             isPushing = true;
             pushed = col.rigidbody;
             attachNormal = col.contacts[0].normal;
+            Debug.Log("attachnormal " + attachNormal);
             Debug.Log(attachNormal);
             // Figure out whether pushing vertically or horizontally
             // then make scale vector based on that
@@ -99,14 +109,48 @@ public class Controls : MonoBehaviour {
             }
         }
         // Else, probably being squished
+        else
+        {
+            Vector2 secondNormal = col.contacts[0].normal;
+            // If vectors cancel out, then they're opposite
+            Vector2 vDiff = - Vector2.Scale(vPrev, attachNormal);
+            if (col.rigidbody != null)
+            {
+                vDiff += Vector2.Scale(col.rigidbody.velocity, secondNormal);
+            }
+            // Else the thing isn't meant to move.
+            Debug.Log(vDiff);
+            if (vDiff.magnitude > crashThresh)
+            {
+                Debug.Log("Squished with " + col.gameObject + ", spd: " + vDiff.magnitude);
+                desu();
+            }
+            else Debug.Log("But nothing happened!");
+            // Shrink collider to simulate squish effect?
+
+        }
     }
 
-    void OnCollisionExit2D() {
-        if (isPushing)
+
+
+    void OnCollisionExit2D(Collision2D col) {
+        if (isPushing && col.rigidbody == pushed)
         {
             isPushing = false;
             pushed = null;
             attachNormal = Vector2.zero;
+
         }
+
+    }
+
+    // placeholder death anim
+    void desu()
+    {
+        rb.freezeRotation = false;
+        rb.angularVelocity = 420.69f;
+        GetComponent<Collider2D>().enabled = false;
+        this.enabled = false;
+        Destroy(gameObject, 5f);
     }
 }
