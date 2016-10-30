@@ -13,19 +13,13 @@ TagManager:
   - UI
   - 
   - 
-<<<<<<< HEAD
-  - Wall
   - 
   - 
   - 
-=======
-  - Player
-  - Block
-  - Wall
->>>>>>> origin/controls
   - 
   - 
-  - Floor
+  - 
+  - 
   - 
   - 
   - 
@@ -46,10 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: New Layer
-    uniqueID: 325255139
-    locked: 0
-  - name: New Layer
-    uniqueID: 456564809
     locked: 0
