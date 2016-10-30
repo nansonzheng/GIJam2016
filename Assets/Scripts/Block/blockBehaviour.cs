@@ -36,6 +36,7 @@ public class blockBehaviour : MonoBehaviour {
 	}
 
 	void OnCollisionExit2D(Collision2D col){
+<<<<<<< HEAD
 		if (col.gameObject.CompareTag ("Player")) {
 			for(int i = 0; i < playerCollisions.Count; i++){
 				if (!playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
@@ -47,6 +48,18 @@ public class blockBehaviour : MonoBehaviour {
 						foreach (SpriteRenderer obj in sr) {
 							obj.color = playerCollisions[0].gameObject.GetComponent<SpriteRenderer> ().color;
 						}
+=======
+		for(int i = 0; i < listLength; i++){
+			if (!(playerCollisions[i].gameObject == null) || !playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
+				playerCollisions.RemoveAt(i);
+				--listLength;
+
+				//Reupdate Color
+				if(listLength >= 1){
+					SpriteRenderer[] sr = this.GetComponentsInChildren<SpriteRenderer> ();
+					foreach (SpriteRenderer obj in sr) {
+						obj.color = playerCollisions[0].gameObject.GetComponent<SpriteRenderer> ().color;
+>>>>>>> origin/controls
 					}
 
 					//Break after update
