@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class turf : MonoBehaviour {
+
+	public IList<Collider2D> collisions = new List<Collider2D>(); 
 
 	// Use this for initialization
 	void Start () {
