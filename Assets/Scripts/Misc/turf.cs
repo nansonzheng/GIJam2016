@@ -13,9 +13,13 @@ public class turf : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
-		//This is supposed to be the block (but its gonna be anything)
-		Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
-		this.GetComponent<SpriteRenderer> ().color = color;
+	void OnTriggerStay2D(Collider2D col){
+		//This is supposed to be the block
+		if(col.gameObject.CompareTag("Block")){
+			Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
+			Debug.Log (color.GetHashCode());
+			if(!(color == Color.white))
+				this.GetComponent<SpriteRenderer> ().color = color;
+		}
 	}
 }
