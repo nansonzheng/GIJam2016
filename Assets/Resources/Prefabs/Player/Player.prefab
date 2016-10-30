@@ -141,7 +141,7 @@ MonoBehaviour:
   pushingMultiplierSide: 0.4
   pushingMultiplierForward: 2
   isPushing: 0
-  ctrlThresh: 1
+  ctrlThresh: 1.5
   crashThresh: 1
   scale: {x: 0, y: 0}
 --- !u!114 &114000010376154000

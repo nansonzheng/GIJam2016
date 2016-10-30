@@ -136,6 +136,13 @@ public class Controls : MonoBehaviour {
         else
         {
             Vector2 secondNormal = col.contacts[0].normal;
+
+            if (Vector2.Scale(attachNormal, secondNormal) == Vector2.zero)
+            {
+                Debug.Log("But it failed! " + attachNormal + " " + secondNormal );
+                return;
+            }
+            Debug.Log(Vector2.Scale(attachNormal, secondNormal));
             // If vectors cancel out, then they're opposite
             Vector2 vDiff = - Vector2.Scale(vPrev, attachNormal);
             if (col.rigidbody != null)
@@ -143,7 +150,6 @@ public class Controls : MonoBehaviour {
                 vDiff += Vector2.Scale(col.rigidbody.velocity, secondNormal);
             }
             // Else the thing isn't meant to move.
-            Debug.Log(vDiff);
             if (vDiff.magnitude > crashThresh)
             {
                 Debug.Log("Squished with " + col.gameObject + ", spd: " + vDiff.magnitude);
@@ -192,5 +198,14 @@ public class Controls : MonoBehaviour {
             transform.localScale= new Vector3(1 - i, 1-i, 1);
             yield return null;
         }
+    }
+
+    Vector2 axesEnabled(Vector2 v) {
+        Vector2 ret = Vector2.zero;
+        if (v.x != 0)
+            ret.x = 1;
+        if (v.y != 0)
+            ret.y = 1;
+        return ret;
     }
 }
