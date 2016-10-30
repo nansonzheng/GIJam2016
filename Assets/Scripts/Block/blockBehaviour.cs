@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class blockBehaviour : MonoBehaviour {
+
+	private 
 
 	// Use this for initialization
 	void Start () {
