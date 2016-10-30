@@ -699,7 +699,7 @@ GameObject:
   - 222: {fileID: 1534680132}
   - 114: {fileID: 1534680131}
   - 114: {fileID: 1534680130}
-  - 95: {fileID: 1534680133}
+  - 114: {fileID: 1534680133}
   m_Layer: 5
   m_Name: Start Button
   m_TagString: Untagged
@@ -764,7 +764,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1534680131}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1534680133}
+        m_MethodName: startGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1534680131
@@ -800,23 +811,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1534680128}
---- !u!95 &1534680133
-Animator:
-  serializedVersion: 3
+--- !u!114 &1534680133
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1534680128}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 19bbf4bfab3a92b4485173f6e5e512f7, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0605d434bb9ab459ab801a16101084, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1565719178
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,7 +989,7 @@ GameObject:
   - 222: {fileID: 1830855995}
   - 114: {fileID: 1830855994}
   - 114: {fileID: 1830855993}
-  - 95: {fileID: 1830855996}
+  - 114: {fileID: 1830855996}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -1049,7 +1054,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1830855994}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1830855996}
+        m_MethodName: quitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1830855994
@@ -1085,23 +1101,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1830855991}
---- !u!95 &1830855996
-Animator:
-  serializedVersion: 3
+--- !u!114 &1830855996
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1830855991}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3ac17b550cf8ff24d8f04cbd3cd446cc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da7e29fbfeeb6f44ebd50b78ef25230c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2134095213
 GameObject:
   m_ObjectHideFlags: 0
