@@ -13,10 +13,16 @@ TagManager:
   - UI
   - 
   - 
+<<<<<<< HEAD
   - Wall
   - 
   - 
   - 
+=======
+  - Player
+  - Block
+  - Wall
+>>>>>>> origin/controls
   - 
   - 
   - Floor

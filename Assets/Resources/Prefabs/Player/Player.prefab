@@ -45,7 +45,7 @@ GameObject:
   - 114: {fileID: 114000013931623660}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64030027e2362ac42bb4c43b90903cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offset: 5
 --- !u!212 &212000013797231982
 SpriteRenderer:
   m_ObjectHideFlags: 1
