@@ -6,6 +6,11 @@ public class turf : MonoBehaviour {
 
 	public IList<Collider2D> collisions = new List<Collider2D>(); 
 
+	public void notifyChange(Color color){
+		if(!(color == Color.white))
+			this.GetComponent<SpriteRenderer> ().color = color;	
+	}
+
 	// Use this for initialization
 	void Start () {
 	
@@ -20,9 +25,9 @@ public class turf : MonoBehaviour {
 		//This is supposed to be the block
 		if(col.gameObject.CompareTag("Block")){
 			Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
-			Debug.Log (color.GetHashCode());
-			if(!(color == Color.white))
-				this.GetComponent<SpriteRenderer> ().color = color;
+			notifyChange (color);
 		}
 	}
+
+
 }
