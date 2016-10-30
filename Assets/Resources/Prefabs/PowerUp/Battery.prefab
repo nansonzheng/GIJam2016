@@ -24,9 +24,10 @@ GameObject:
   - 114: {fileID: 114000010565132660}
   - 61: {fileID: 61000012266716736}
   - 50: {fileID: 50000013624786176}
+  - 114: {fileID: 114000012216049016}
   m_Layer: 0
   m_Name: Battery
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,6 +105,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: 5
+--- !u!114 &114000012216049016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012922514740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da44fcc0b94badb48ac3a8cb11ea5b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212000013603160860
 SpriteRenderer:
   m_ObjectHideFlags: 1
