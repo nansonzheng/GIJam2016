@@ -19,6 +19,7 @@ public class Controls : MonoBehaviour {
     public float ctrlThresh, crashThresh;
     public bool? alive;
     public int powerIncrements, powerMax;
+    public float powerStep;
 
     Rigidbody2D rb;
     Rigidbody2D pushed;
@@ -328,8 +329,8 @@ public class Controls : MonoBehaviour {
     {
         if (baseScale != Vector2.one)
         {
-            scale = baseScale + (axesEnabled(attachNormal) * powerIncrements);
-            Debug.Log(scale + " " + axesEnabled(attachNormal) * powerIncrements);
+            scale = baseScale + (axesEnabled(attachNormal) * powerIncrements * powerStep);
+            Debug.Log(scale + " " + axesEnabled(attachNormal) * powerIncrements * powerStep);
         }
         else
         {
