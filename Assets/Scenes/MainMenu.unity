@@ -99,6 +99,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 379960479}
   - 82: {fileID: 379960478}
+  - 114: {fileID: 379960480}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -193,6 +194,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+--- !u!114 &379960480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 379960477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23d426903fbc874f949764dba3eafb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: {fileID: 379960477}
 --- !u!1 &454752257
 GameObject:
   m_ObjectHideFlags: 0
