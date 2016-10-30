@@ -276,6 +276,7 @@ public class Controls : MonoBehaviour {
         }
     }
 
+    // Returns Vector2 with each component = 1 where not equal to 0
     Vector2 axesEnabled(Vector2 v) {
         Vector2 ret = Vector2.zero;
         if (v.x != 0)
