@@ -11,17 +11,10 @@ public class Controls : MonoBehaviour {
         Player4
     }
 
-	public float angleErrorThresh;
-	public float anglePushingThresh;
-	public Vector2 vectorMultiplierSide, vectorMultiplierForward;
-
-	private IList<Collision2D> currentCollisions = new List<Collision2D>();
-
     public Player playerNum;
     public float speed;
-	public float pushingMultiplierSide, pushingMultiplierForward, beingPushedMultiplierForward;
+    public float pushingMultiplierSide, pushingMultiplierForward;
     public bool isPushing;
-	public bool beingPushed;
     public float ctrlThresh, crashThresh;
     public Vector2 scale;
     public bool? alive;
@@ -46,24 +39,39 @@ public class Controls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		controller ();	//Get Input
-
+	    switch (playerNum)
+        {
+            case Player.Player1:
+                direction.x = Input.GetAxis("Horizontal");
+                direction.y = Input.GetAxis("Vertical");
+                break;
+            case Player.Player2:
+                direction.x = Input.GetAxis("Horizontal2");
+                direction.y = Input.GetAxis("Vertical2");
+                break;
+            case Player.Player3:
+                direction.x = Input.GetAxis("Horizontal3");
+                direction.y = Input.GetAxis("Vertical3");
+                break;
+            case Player.Player4:
+                direction.x = Input.GetAxis("Horizontal4");
+                direction.y = Input.GetAxis("Vertical4");
+                break;
+        }
+        if (direction != Vector2.zero) {
+            directionF = Vector2.Angle(Vector2.up, direction);
+        // If going left, need to add 180 to get actual angle
+        if (direction.x < 0)
+        {
+            directionF = 360 - directionF;
+        }
+        // Divide to get number in range of 0 to 8, mod to get nearest int
+        directionF = (Mathf.Round(directionF / 45)) % 8;
+        }
+        
+            
         //rb.velocity = direction * speed;
         vPrev = rb.velocity;
-
-		//Checking for modifiers and assign velocities
-		if (getBeingPushed ()) {
-			handleBeingPushed ();
-			rb.velocity = direction * speed;
-		} 
-		getIsPushing ();
-
-		//Add multipliers and apply our resultant velocity
-		if (isPushing || beingPushed) {
-			
-		}
-			
-
         if (!isPushing)
         {
             rb.velocity = direction * speed;
@@ -181,84 +189,17 @@ public class Controls : MonoBehaviour {
 
     }
 
-	void controller(){
-		switch (playerNum)
-		{
-		case Player.Player1:
-			direction.x = Input.GetAxis("Horizontal");
-			direction.y = Input.GetAxis("Vertical");
-			break;
-		case Player.Player2:
-			direction.x = Input.GetAxis("Horizontal2");
-			direction.y = Input.GetAxis("Vertical2");
-			break;
-		case Player.Player3:
-			direction.x = Input.GetAxis("Horizontal3");
-			direction.y = Input.GetAxis("Vertical3");
-			break;
-		case Player.Player4:
-			direction.x = Input.GetAxis("Horizontal4");
-			direction.y = Input.GetAxis("Vertical4");
-			break;
-		}
-		if (direction != Vector2.zero) {
-			directionF = Vector2.Angle(Vector2.up, direction);
-			// If going left, need to add 180 to get actual angle
-			if (direction.x < 0)
-			{
-				directionF = 360 - directionF;
-			}
-			// Divide to get number in range of 0 to 8, mod to get nearest int
-			directionF = (Mathf.Round(directionF / 45)) % 8;
-		}
-	}
-
-	bool getBeingPushed(){
-		beingPushed = (Vector2.Angle (direction.normalized, rb.velocity.normalized) <= angleErrorThresh &&
-		currentCollisions.Count >= 1 && rb.velocity >= ctrlThresh);
-
-		return beingPushed;
-	}
-
-	void handleBeingPushed(){
-		//Assume normal is the velocity we are travelling
-		Vector2 normal = rb.velocity.normalized;
-
-		//Here we cancel out movement with the normal direction
-		direction = direction.normalized - normal;
-
-		//Modify modifiers
-		vectorMultiplierSide = new Vector2 (Mathf.Abs(-normal.y)*pushingMultiplierSide, Mathf.Abs(normal.x)*pushingMultiplierSide);
-	}
-
-	bool getIsPushing(){
-		if (currentCollisions.Count >= 1 && rb.velocity >= ctrlThresh) {
-			foreach (Collision2D c in currentCollisions) {
-				if (Vector2.Angle (direction.normalized, c.contacts [0].normal) >= anglePushingThresh) {
-					isPushing = true;
-					return isPushing;
-				}
-			}
-		}
-	}
-
     // placeholder death anim
     void desu()
-    {	/*
+    {
         rb.freezeRotation = false;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         rb.angularVelocity = 420.69f;
-        StartCoroutine(shrink());*/
-		foreach( Transform child in transform )
-		{
-			child.gameObject.SetActiveRecursively( false );
-		} 
-		rb.constraints = RigidbodyConstraints2D.FreezePosition;
         GetComponent<Collider2D>().enabled = false;
-		GetComponent<SpriteRenderer> ().sortingOrder = 1;
         this.enabled = false;
-        Destroy(gameObject, 0.8f);
+        StartCoroutine(shrink());
+        Destroy(gameObject, 5f);
         alive = false;
-		ani.SetTrigger ("death");
     }
 
     void setAnimVars()
