@@ -14,7 +14,17 @@ public class blockBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		//Remove all dead player touches
+		IList<Collision2D> toRemove = new List<Collision2D>();
+		for(int i = 0;i < playerCollisions.Count; i++) {
+			if (playerCollisions[i].gameObject == null || !playerCollisions[i].gameObject.GetComponent<Controls> ().alive.Value) {
+				toRemove.Add (playerCollisions[i]);
+			}
+		}
+
+		foreach (Collision2D c in toRemove) {
+			playerCollisions.Remove(c);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col){
@@ -38,7 +48,7 @@ public class blockBehaviour : MonoBehaviour {
 	void OnCollisionExit2D(Collision2D col){
 		if (col.gameObject.CompareTag ("Player")) {
 			for(int i = 0; i < playerCollisions.Count; i++){
-				if (!(playerCollisions[i].gameObject == null) || !playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
+				if (playerCollisions [i].gameObject == col.gameObject){
 					playerCollisions.RemoveAt(i);
 
 					//Reupdate Color
@@ -47,10 +57,7 @@ public class blockBehaviour : MonoBehaviour {
 						foreach (SpriteRenderer obj in sr) {
 							obj.color = playerCollisions[0].gameObject.GetComponent<SpriteRenderer> ().color;
 						}
-					}
-
-					//Break after update
-					break;
+					}	
 				}
 			}
 		}
