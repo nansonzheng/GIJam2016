@@ -36,7 +36,7 @@ public class blockBehaviour : MonoBehaviour {
 
 	void OnCollisionExit2D(Collision2D col){
 		for(int i = 0; i < listLength; i++){
-			if (playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
+			if (!playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
 				playerCollisions.RemoveAt(i);
 				--listLength;
 
