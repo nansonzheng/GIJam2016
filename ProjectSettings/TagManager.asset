@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Block
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -13,13 +15,13 @@ TagManager:
   - UI
   - 
   - 
-  - Wall
   - 
   - 
   - 
   - 
   - 
-  - Floor
+  - 
+  - 
   - 
   - 
   - 
@@ -40,10 +42,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: New Layer
-    uniqueID: 325255139
-    locked: 0
-  - name: New Layer
-    uniqueID: 456564809
     locked: 0

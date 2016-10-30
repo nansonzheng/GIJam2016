@@ -1,7 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class turf : MonoBehaviour {
+
+	public IList<Collider2D> collisions = new List<Collider2D>(); 
+
+	public void notifyChange(Color color){
+		if(!(color == Color.white))
+			this.GetComponent<SpriteRenderer> ().color = color;	
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -14,8 +22,12 @@ public class turf : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		//This is supposed to be the block (but its gonna be anything)
-		Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
-		this.GetComponent<SpriteRenderer> ().color = color;
+		//This is supposed to be the block
+		if(col.gameObject.CompareTag("Block")){
+			Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
+			notifyChange (color);
+		}
 	}
+
+
 }

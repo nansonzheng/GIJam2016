@@ -15,23 +15,32 @@ public class Controls : MonoBehaviour {
     public float speed;
     public float pushingMultiplierSide, pushingMultiplierForward;
     public bool isPushing;
+    public bool beingPushed;
     public float ctrlThresh, crashThresh;
+    Vector2 scale;
+    public bool? alive;
+
     Rigidbody2D rb;
     Rigidbody2D pushed;
     Vector2 attachNormal;
-    public Vector2 scale;
 
     Vector2 direction;
     float directionF;
     Vector2 vPrev;
 
     Animator ani;
+    GameObject EX;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         scale = Vector2.one;
         ani = GetComponent<Animator>();
+        EX = transform.Find("EX").gameObject;
+        alive = true;
+        // Spawn facing down pls
+        directionF = 4;
+
 	}
 	
 	// Update is called once per frame
@@ -72,6 +81,7 @@ public class Controls : MonoBehaviour {
         if (!isPushing)
         {
             rb.velocity = direction * speed;
+            beingPushed = false;
         }
         else
         {
@@ -86,10 +96,12 @@ public class Controls : MonoBehaviour {
             if (pushDiff >= 135)
             {
                 rb.velocity = Vector2.Scale(direction * speed, scale);
+                beingPushed = false;
             }
             // Input not to move against block, but block is pushing fast enough
             else if (moveDirDiff <= 60 && rb.velocity.magnitude > ctrlThresh)
             {
+                beingPushed = true;
                 // Switch normal components to get which component "sticks"
                 rb.velocity = new Vector2(direction.x * Mathf.Abs(attachNormal.y), direction.y * Mathf.Abs(attachNormal.x)) * speed * pushingMultiplierSide;
                 
@@ -97,40 +109,69 @@ public class Controls : MonoBehaviour {
             // normal movement
             else
             {
+                beingPushed = false;
                 rb.velocity = direction * speed;
             }
         }
 
         // Uncomment when ready
+        enableEX();
         setAnimVars();
     }
 
-    // TODO: LayerMask for different objects
+
     void OnCollisionEnter2D(Collision2D col) {
-        if (!isPushing && col.rigidbody != null)
+        if (col.gameObject.CompareTag(this.tag))
         {
-            isPushing = true;
-            pushed = col.rigidbody;
-            attachNormal = col.contacts[0].normal;
-            Debug.Log("attachnormal " + attachNormal);
-            Debug.Log(attachNormal);
-            // Figure out whether pushing vertically or horizontally
-            // then make scale vector based on that
-            if (attachNormal.x == 0f)
+            return;
+        }
+        if (!isPushing)
+        {
+            // Pushable objects have rigidbody
+            if (col.rigidbody != null)
             {
-                scale.x = pushingMultiplierSide;
-                scale.y = pushingMultiplierForward;
+               isPushing = true;
+               pushed = col.rigidbody;
+               attachNormal = col.contacts[0].normal;
+               Debug.Log("attachnormal " + attachNormal);
+               Debug.Log(attachNormal);
+                // Figure out whether pushing vertically or horizontally
+                // then make scale vector based on that
+                if (attachNormal.x == 0f)
+                {
+                    scale.x = pushingMultiplierSide;
+                    scale.y = pushingMultiplierForward;
+                }
+                else if (attachNormal.y == 0f)
+                {
+                    scale.x = pushingMultiplierForward;
+                    scale.y = pushingMultiplierSide;
+                }
             }
-            else if (attachNormal.y == 0f)
+            // else wall?
+           else
             {
-                scale.x = pushingMultiplierForward;
-                scale.y = pushingMultiplierSide;
+                // change isPushing to true to enable collisions
+                // pushed remains null to indicate wall
+                // at collisionexit, col.rigidbody is null == pushed.
+                isPushing = true;
+                attachNormal = col.contacts[0].normal;
+                scale = Vector2.one;
+                Debug.Log("attack on titan");
             }
+            
         }
         // Else, probably being squished
         else
         {
             Vector2 secondNormal = col.contacts[0].normal;
+
+            if (Vector2.Scale(attachNormal, secondNormal) == Vector2.zero)
+            {
+                Debug.Log("But it failed! " + attachNormal + " " + secondNormal );
+                return;
+            }
+            Debug.Log(Vector2.Scale(attachNormal, secondNormal));
             // If vectors cancel out, then they're opposite
             Vector2 vDiff = - Vector2.Scale(vPrev, attachNormal);
             if (col.rigidbody != null)
@@ -138,18 +179,15 @@ public class Controls : MonoBehaviour {
                 vDiff += Vector2.Scale(col.rigidbody.velocity, secondNormal);
             }
             // Else the thing isn't meant to move.
-            Debug.Log(vDiff);
             if (vDiff.magnitude > crashThresh)
             {
                 Debug.Log("Squished with " + col.gameObject + ", spd: " + vDiff.magnitude);
-                desu();
+                death();
             }
             else Debug.Log("But nothing happened!");
-            // Shrink collider to simulate squish effect?
 
         }
     }
-
 
 
     void OnCollisionExit2D(Collision2D col) {
@@ -158,24 +196,49 @@ public class Controls : MonoBehaviour {
             isPushing = false;
             pushed = null;
             attachNormal = Vector2.zero;
-
         }
 
     }
 
     // placeholder death anim
-    void desu()
+    void death()
     {
-        rb.freezeRotation = false;
-        rb.angularVelocity = 420.69f;
         GetComponent<Collider2D>().enabled = false;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         this.enabled = false;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 0.7f);
+        alive = false;
+        ani.SetTrigger("death");
+        GetComponent<SpriteRenderer>().sortingOrder = 1;
     }
 
     void setAnimVars()
     {
         ani.SetFloat("movSpeed", rb.velocity.magnitude);
         ani.SetFloat("direction", directionF);
+    }
+
+    IEnumerator shrink()
+    {
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            transform.localScale= new Vector3(1 - i, 1-i, 1);
+            yield return null;
+        }
+    }
+
+    // Returns Vector2 with each component = 1 where not equal to 0
+    Vector2 axesEnabled(Vector2 v) {
+        Vector2 ret = Vector2.zero;
+        if (v.x != 0)
+            ret.x = 1;
+        if (v.y != 0)
+            ret.y = 1;
+        return ret;
+    }
+
+    void enableEX()
+    {
+        EX.SetActive(beingPushed);
     }
 }
