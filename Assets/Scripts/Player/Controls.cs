@@ -29,7 +29,7 @@ public class Controls : MonoBehaviour {
     Vector2 vPrev;
 
     Animator ani;
-    GameObject EX;
+    Animator EX;
 
     IList<GameObject> touching;
 
@@ -38,7 +38,7 @@ public class Controls : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         scale = Vector2.one;
         ani = GetComponent<Animator>();
-        EX = transform.Find("EX").gameObject;
+        EX = transform.Find("EX").GetComponent<Animator>();
         alive = true;
         // Spawn facing down pls
         directionF = 4;
@@ -303,7 +303,7 @@ public class Controls : MonoBehaviour {
     void enableEX()
     {
         bool notGoingIntendedWay = direction.normalized != rb.velocity.normalized && rb.velocity.magnitude > ctrlThresh;
-        EX.SetActive(notGoingIntendedWay);
+        EX.SetBool("beingPushed", beingPushed);
     }
 
     IEnumerator EXenable()
@@ -313,7 +313,7 @@ public class Controls : MonoBehaviour {
         {
             if (recorded != beingPushed)
             {
-                EX.SetActive(beingPushed);
+                EX.SetBool("beingPushed", beingPushed);
                 recorded = beingPushed;
             }
             yield return null;
