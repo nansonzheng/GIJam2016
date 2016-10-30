@@ -15,8 +15,9 @@ public class Controls : MonoBehaviour {
     public float speed;
     public float pushingMultiplierSide, pushingMultiplierForward;
     public bool isPushing;
+    public bool beingPushed;
     public float ctrlThresh, crashThresh;
-    public Vector2 scale;
+    Vector2 scale;
     public bool? alive;
 
     Rigidbody2D rb;
@@ -28,13 +29,18 @@ public class Controls : MonoBehaviour {
     Vector2 vPrev;
 
     Animator ani;
+    GameObject EX;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         scale = Vector2.one;
         ani = GetComponent<Animator>();
+        EX = transform.Find("EX").gameObject;
         alive = true;
+        // Spawn facing down pls
+        directionF = 4;
+
 	}
 	
 	// Update is called once per frame
@@ -75,6 +81,7 @@ public class Controls : MonoBehaviour {
         if (!isPushing)
         {
             rb.velocity = direction * speed;
+            beingPushed = false;
         }
         else
         {
@@ -89,10 +96,12 @@ public class Controls : MonoBehaviour {
             if (pushDiff >= 135)
             {
                 rb.velocity = Vector2.Scale(direction * speed, scale);
+                beingPushed = false;
             }
             // Input not to move against block, but block is pushing fast enough
             else if (moveDirDiff <= 60 && rb.velocity.magnitude > ctrlThresh)
             {
+                beingPushed = true;
                 // Switch normal components to get which component "sticks"
                 rb.velocity = new Vector2(direction.x * Mathf.Abs(attachNormal.y), direction.y * Mathf.Abs(attachNormal.x)) * speed * pushingMultiplierSide;
                 
@@ -100,11 +109,13 @@ public class Controls : MonoBehaviour {
             // normal movement
             else
             {
+                beingPushed = false;
                 rb.velocity = direction * speed;
             }
         }
 
         // Uncomment when ready
+        enableEX();
         setAnimVars();
     }
 
@@ -171,7 +182,7 @@ public class Controls : MonoBehaviour {
             if (vDiff.magnitude > crashThresh)
             {
                 Debug.Log("Squished with " + col.gameObject + ", spd: " + vDiff.magnitude);
-                desu();
+                death();
             }
             else Debug.Log("But nothing happened!");
 
@@ -190,16 +201,14 @@ public class Controls : MonoBehaviour {
     }
 
     // placeholder death anim
-    void desu()
+    void death()
     {
-        rb.freezeRotation = false;
-        rb.constraints = RigidbodyConstraints2D.FreezePosition;
-        rb.angularVelocity = 420.69f;
         GetComponent<Collider2D>().enabled = false;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         this.enabled = false;
-        StartCoroutine(shrink());
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 0.7f);
         alive = false;
+        ani.SetTrigger("death");
     }
 
     void setAnimVars()
@@ -225,5 +234,10 @@ public class Controls : MonoBehaviour {
         if (v.y != 0)
             ret.y = 1;
         return ret;
+    }
+
+    void enableEX()
+    {
+        EX.SetActive(beingPushed);
     }
 }
