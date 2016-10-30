@@ -17,6 +17,7 @@ public class Controls : MonoBehaviour {
     public bool isPushing;
     public float ctrlThresh, crashThresh;
     public Vector2 scale;
+    public bool? alive;
 
     Rigidbody2D rb;
     Rigidbody2D pushed;
@@ -33,6 +34,7 @@ public class Controls : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         scale = Vector2.one;
         ani = GetComponent<Animator>();
+        alive = true;
 	}
 	
 	// Update is called once per frame
@@ -183,6 +185,7 @@ public class Controls : MonoBehaviour {
         this.enabled = false;
         StartCoroutine(shrink());
         Destroy(gameObject, 5f);
+        alive = false;
     }
 
     void setAnimVars()
