@@ -209,6 +209,7 @@ public class Controls : MonoBehaviour {
         Destroy(gameObject, 0.7f);
         alive = false;
         ani.SetTrigger("death");
+        GetComponent<SpriteRenderer>().sortingOrder = 1;
     }
 
     void setAnimVars()
