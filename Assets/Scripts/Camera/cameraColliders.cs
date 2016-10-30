@@ -10,6 +10,8 @@ public class cameraColliders : MonoBehaviour {
 
 	void Start ()
 	{
+        PhysicsMaterial2D bouncywall = Resources.Load<PhysicsMaterial2D>("Materials/cameraCollider");
+
 		//Create a Dictionary to hold the transforms and their names
 		Dictionary<string,Transform> colliders = new Dictionary<string,Transform>();
 
@@ -29,6 +31,7 @@ public class cameraColliders : MonoBehaviour {
 		{
 
 			bc.Value.gameObject.AddComponent<BoxCollider2D>();
+            bc.Value.gameObject.GetComponent<BoxCollider2D>().sharedMaterial = bouncywall;
 			//give the objects a name
 			bc.Value.name = bc.Key + "Collider";
 			//Make the object with collider child of the object this script is attached to

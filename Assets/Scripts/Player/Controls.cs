@@ -16,10 +16,11 @@ public class Controls : MonoBehaviour {
     public float pushingMultiplierSide, pushingMultiplierForward;
     public bool isPushing;
     public float ctrlThresh, crashThresh;
+    public Vector2 scale;
+
     Rigidbody2D rb;
     Rigidbody2D pushed;
     Vector2 attachNormal;
-    public Vector2 scale;
 
     Vector2 direction;
     float directionF;
@@ -107,6 +108,10 @@ public class Controls : MonoBehaviour {
 
     // TODO: LayerMask for different objects
     void OnCollisionEnter2D(Collision2D col) {
+        if (col.gameObject.CompareTag(this.tag))
+        {
+            return;
+        }
         if (!isPushing && col.rigidbody != null)
         {
             isPushing = true;
@@ -158,7 +163,6 @@ public class Controls : MonoBehaviour {
             isPushing = false;
             pushed = null;
             attachNormal = Vector2.zero;
-
         }
 
     }
@@ -167,9 +171,11 @@ public class Controls : MonoBehaviour {
     void desu()
     {
         rb.freezeRotation = false;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         rb.angularVelocity = 420.69f;
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        StartCoroutine(shrink());
         Destroy(gameObject, 5f);
     }
 
@@ -177,5 +183,14 @@ public class Controls : MonoBehaviour {
     {
         ani.SetFloat("movSpeed", rb.velocity.magnitude);
         ani.SetFloat("direction", directionF);
+    }
+
+    IEnumerator shrink()
+    {
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            transform.localScale= new Vector3(1 - i, 1-i, 1);
+            yield return null;
+        }
     }
 }
