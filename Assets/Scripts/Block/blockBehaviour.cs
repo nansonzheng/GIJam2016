@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class blockBehaviour : MonoBehaviour {
 
 	private IList<Collision2D> playerCollisions = new List<Collision2D>();
-	private int listLength = 0;
+	private IList<Collider2D> platformTriggers = new List<Collider2D> ();
 
 	// Use this for initialization
 	void Start () {
@@ -22,34 +22,61 @@ public class blockBehaviour : MonoBehaviour {
 		if (col.gameObject.CompareTag ("Player")) {
 			Color color = col.gameObject.GetComponent<SpriteRenderer> ().color;
 
-			if (color != this.GetComponent<SpriteRenderer> ().color && listLength == 0) {
+			//Update Block Color
+			if (color != this.GetComponent<SpriteRenderer> ().color && playerCollisions.Count == 0) {
 				SpriteRenderer[] sr = this.GetComponentsInChildren<SpriteRenderer> ();
 				foreach (SpriteRenderer obj in sr) {
 					obj.color = color;
 				}
 			}
-
+			//Change in color, change blocks below
+			changeCurrentPlatforms();
 			playerCollisions.Add(col);
-			++listLength;
 		}
 	}
 
 	void OnCollisionExit2D(Collision2D col){
-		for(int i = 0; i < listLength; i++){
-			if (!playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
-				playerCollisions.RemoveAt(i);
-				--listLength;
+		if (col.gameObject.CompareTag ("Player")) {
+			for(int i = 0; i < playerCollisions.Count; i++){
+				if (!playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
+					playerCollisions.RemoveAt(i);
 
-				//Reupdate Color
-				if(listLength >= 1){
-					SpriteRenderer[] sr = this.GetComponentsInChildren<SpriteRenderer> ();
-					foreach (SpriteRenderer obj in sr) {
-						obj.color = playerCollisions[0].gameObject.GetComponent<SpriteRenderer> ().color;
+					//Reupdate Color
+					if(playerCollisions.Count >= 1){
+						SpriteRenderer[] sr = this.GetComponentsInChildren<SpriteRenderer> ();
+						foreach (SpriteRenderer obj in sr) {
+							obj.color = playerCollisions[0].gameObject.GetComponent<SpriteRenderer> ().color;
+						}
 					}
-				}
 
-				break;
+					//Break after update
+					break;
+				}
 			}
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D col){
+		//Add the list of currently touching platforms
+		if(col.gameObject.CompareTag("Platform")){
+			platformTriggers.Add (col);
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D col){
+		//Remmove the leaving platform
+		if(col.gameObject.CompareTag("Platform")){
+			for (int i = 0; i < platformTriggers.Count; i++) {
+				if (platformTriggers [i].gameObject == col.gameObject) {
+					platformTriggers.RemoveAt (i);
+				}
+			}
+		}
+	}
+
+	void changeCurrentPlatforms(){
+		foreach (Collider2D c in platformTriggers) {
+			c.gameObject.GetComponent<turf> ().notifyChange(GetComponent<SpriteRenderer>().color);
 		}
 	}
 }
