@@ -3706,7 +3706,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: efabc1926cb9b9b4995aef15e1af8477, type: 3}
-  m_Color: {r: 0.49803922, g: 0.9764706, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!1001 &956967301
@@ -5746,7 +5746,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300004, guid: efabc1926cb9b9b4995aef15e1af8477, type: 3}
-  m_Color: {r: 0.2627451, g: 0.7019608, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!4 &1411226572 stripped
