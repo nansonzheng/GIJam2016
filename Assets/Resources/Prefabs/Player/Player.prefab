@@ -20,13 +20,14 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014077449574}
   - 212: {fileID: 212000011747944208}
+  - 95: {fileID: 95000013538780156}
   m_Layer: 0
   m_Name: EX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1000012959677890
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,6 +156,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95000013538780156
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010526278374}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: da008c5dfb1d4f74391b445b0b5c94e0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114000010141571872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -174,6 +192,8 @@ MonoBehaviour:
   beingPushed: 0
   ctrlThresh: 1.5
   crashThresh: 1
+  powerIncrements: 0
+  powerMax: 10
 --- !u!114 &114000010376154000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -244,7 +264,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e98785b80bb920a47a98f04559da7618, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

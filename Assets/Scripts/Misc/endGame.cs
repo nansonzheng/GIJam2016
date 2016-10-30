@@ -4,13 +4,14 @@ using System.Collections;
 public class endGame : MonoBehaviour {
 
     public GameObject timer;
+    public GameObject end;
 
-	/*void Update () {
+	void Update () {
         if (timer.GetComponent<timer>().currentTime <= 0)
         {
-            //timer.GetComponent<timer>().pauseTimer();
-            //gameObject.SetActive(true);
+            timer.GetComponent<timer>().pauseTimer();
+            gameObject.SetActive(true);
         }
-	}*/
+	}
 }
 
