@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class Controls : MonoBehaviour {
 
     public enum Player {
-        Player1,
-        Player2,
-        Player3,
-        Player4
+        Player1 = 1,
+        Player2 = 2,
+        Player3 = 3,
+        Player4 = 4
     }
 
     public Player playerNum;
@@ -31,6 +31,8 @@ public class Controls : MonoBehaviour {
     Animator ani;
     GameObject EX;
 
+    IList<GameObject> touching;
+
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -41,7 +43,9 @@ public class Controls : MonoBehaviour {
         // Spawn facing down pls
         directionF = 4;
 
-	}
+        StartCoroutine(EXenable());
+        touching = new List<GameObject>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -113,9 +117,7 @@ public class Controls : MonoBehaviour {
                 rb.velocity = direction * speed;
             }
         }
-
-        // Uncomment when ready
-        enableEX();
+        
         setAnimVars();
     }
 
@@ -125,6 +127,8 @@ public class Controls : MonoBehaviour {
         {
             return;
         }
+
+        
         if (!isPushing)
         {
             // Pushable objects have rigidbody
@@ -134,7 +138,6 @@ public class Controls : MonoBehaviour {
                pushed = col.rigidbody;
                attachNormal = col.contacts[0].normal;
                Debug.Log("attachnormal " + attachNormal);
-               Debug.Log(attachNormal);
                 // Figure out whether pushing vertically or horizontally
                 // then make scale vector based on that
                 if (attachNormal.x == 0f)
@@ -164,8 +167,12 @@ public class Controls : MonoBehaviour {
         // Else, probably being squished
         else
         {
+            
+            //Debug.Log("asf" + pushed.velocity);
+            Vector2 vectorOfAttack = transform.position - col.transform.position;
             Vector2 secondNormal = col.contacts[0].normal;
-
+            /*
+            // If multiplying components gives 0, then they're not in same direction
             if (Vector2.Scale(attachNormal, secondNormal) == Vector2.zero)
             {
                 Debug.Log("But it failed! " + attachNormal + " " + secondNormal );
@@ -179,25 +186,81 @@ public class Controls : MonoBehaviour {
                 vDiff += Vector2.Scale(col.rigidbody.velocity, secondNormal);
             }
             // Else the thing isn't meant to move.
+            Debug.Log("Attack angle:" + vectorOfAttack + " " + attachNormal + "; spd = " +vDiff.magnitude);
             if (vDiff.magnitude > crashThresh)
             {
-                Debug.Log("Squished with " + col.gameObject + ", spd: " + vDiff.magnitude);
+                Debug.Log("Squished with " + col.gameObject);
                 death();
             }
             else Debug.Log("But nothing happened!");
+            */
+            
+            Vector2 vTotal = rb.velocity;
+            if (pushed)
+            {
+                vTotal += pushed.velocity;
+            }
+            if (col.rigidbody)
+            {
+                vTotal -= col.rigidbody.velocity;
+            }
+            
+            float angleOfAttack = Vector2.Angle(secondNormal, vTotal);
+
+            Debug.Log("v=" + vTotal + ", angle=" + angleOfAttack);
+            if (pushed && col.rigidbody)
+            {
+                float a = Vector2.Angle(transform.position - pushed.transform.position, transform.position - col.gameObject.transform.position);
+                if (a < 90)
+                {
+                    Debug.Log("you shouldn't be dying here");
+                    return;
+                }
+            }
+
+            if ((rb.velocity == Vector2.zero || angleOfAttack >= 120) && vTotal.magnitude > crashThresh)
+            {
+                death();
+            }
 
         }
+        if (!touching.Contains(col.gameObject))
+        {
+            touching.Add(col.gameObject);
+        }
+
     }
 
 
     void OnCollisionExit2D(Collision2D col) {
+        if (!touching.Remove(col.gameObject))
+        {
+            Debug.LogWarning("OnCollisionExit2D: Tried to remove a thing not in the list!");
+        }
         if (isPushing && col.rigidbody == pushed)
         {
-            isPushing = false;
+            // Initial set to null
             pushed = null;
-            attachNormal = Vector2.zero;
+            //TODO if something else in list
+            if (touching.Count != 0)
+            {
+                foreach (GameObject c in touching)
+                {
+                    pushed = c.GetComponent<Rigidbody2D>();
+                    // It's possible a wall/immovable obj is added
+                    // Prioritize on moveables
+                    if (pushed != null) {
+                        break;
+                    }
+                }
+            }
+            // If nothing in list
+            else
+            {
+                isPushing = false;
+                attachNormal = Vector2.zero;
+            }
         }
-
     }
 
     // placeholder death anim
@@ -206,10 +269,10 @@ public class Controls : MonoBehaviour {
         GetComponent<Collider2D>().enabled = false;
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         this.enabled = false;
-        Destroy(gameObject, 0.7f);
         alive = false;
         ani.SetTrigger("death");
         GetComponent<SpriteRenderer>().sortingOrder = 1;
+        Destroy(gameObject, 1.5f);
     }
 
     void setAnimVars()
@@ -239,6 +302,21 @@ public class Controls : MonoBehaviour {
 
     void enableEX()
     {
-        EX.SetActive(beingPushed);
+        bool notGoingIntendedWay = direction.normalized != rb.velocity.normalized && rb.velocity.magnitude > ctrlThresh;
+        EX.SetActive(notGoingIntendedWay);
+    }
+
+    IEnumerator EXenable()
+    {
+        bool recorded = !beingPushed;
+        while (true)
+        {
+            if (recorded != beingPushed)
+            {
+                EX.SetActive(beingPushed);
+                recorded = beingPushed;
+            }
+            yield return null;
+        }
     }
 }
