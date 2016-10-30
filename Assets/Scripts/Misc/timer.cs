@@ -38,12 +38,12 @@ public class timer : MonoBehaviour {
 		return timeInString;
 	}
 
-	void startTimer(){
+	public void startTimer(){
 		timeStarted = true;
 		Time.timeScale = 1;
 	}
 
-	void pauseTimer(){
+	public void pauseTimer(){
 		timeStarted = false;
 		Time.timeScale = 0;
 	}

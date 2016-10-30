@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class Controls : MonoBehaviour {
 
     public enum Player {
-        Player1,
-        Player2,
-        Player3,
-        Player4
+        Player1 = 1,
+        Player2 = 2,
+        Player3 = 3,
+        Player4 = 4
     }
 
     public Player playerNum;
