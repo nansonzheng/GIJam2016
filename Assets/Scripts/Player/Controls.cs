@@ -17,12 +17,14 @@ public class Controls : MonoBehaviour {
     public bool isPushing;
     public bool beingPushed;
     public float ctrlThresh, crashThresh;
-    Vector2 scale;
     public bool? alive;
+    public int powerIncrements, powerMax;
 
     Rigidbody2D rb;
     Rigidbody2D pushed;
     Vector2 attachNormal;
+    Vector2 baseScale, scale;
+    bool normalIsX;
 
     Vector2 direction;
     float directionF;
@@ -36,7 +38,7 @@ public class Controls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
-        scale = Vector2.one;
+        baseScale = Vector2.one;
         ani = GetComponent<Animator>();
         EX = transform.Find("EX").GetComponent<Animator>();
         alive = true;
@@ -123,11 +125,10 @@ public class Controls : MonoBehaviour {
 
 
     void OnCollisionEnter2D(Collision2D col) {
-        if (col.gameObject.CompareTag(this.tag))
+        if (col.gameObject.CompareTag(this.tag) || col.gameObject.CompareTag("PowerUp"))
         {
             return;
         }
-
         
         if (!isPushing)
         {
@@ -142,14 +143,15 @@ public class Controls : MonoBehaviour {
                 // then make scale vector based on that
                 if (attachNormal.x == 0f)
                 {
-                    scale.x = pushingMultiplierSide;
-                    scale.y = pushingMultiplierForward;
+                    baseScale.x = pushingMultiplierSide;
+                    baseScale.y = pushingMultiplierForward;
                 }
                 else if (attachNormal.y == 0f)
                 {
-                    scale.x = pushingMultiplierForward;
-                    scale.y = pushingMultiplierSide;
+                    baseScale.x = pushingMultiplierForward;
+                    baseScale.y = pushingMultiplierSide;
                 }
+                UpdateScale();
             }
             // else wall?
            else
@@ -159,7 +161,8 @@ public class Controls : MonoBehaviour {
                 // at collisionexit, col.rigidbody is null == pushed.
                 isPushing = true;
                 attachNormal = col.contacts[0].normal;
-                scale = Vector2.one;
+                baseScale = Vector2.one;
+                UpdateScale();
                 Debug.Log("attack on titan");
             }
             
@@ -167,34 +170,9 @@ public class Controls : MonoBehaviour {
         // Else, probably being squished
         else
         {
-            
-            //Debug.Log("asf" + pushed.velocity);
             Vector2 vectorOfAttack = transform.position - col.transform.position;
             Vector2 secondNormal = col.contacts[0].normal;
-            /*
-            // If multiplying components gives 0, then they're not in same direction
-            if (Vector2.Scale(attachNormal, secondNormal) == Vector2.zero)
-            {
-                Debug.Log("But it failed! " + attachNormal + " " + secondNormal );
-                return;
-            }
-            Debug.Log(Vector2.Scale(attachNormal, secondNormal));
-            // If vectors cancel out, then they're opposite
-            Vector2 vDiff = - Vector2.Scale(vPrev, attachNormal);
-            if (col.rigidbody != null)
-            {
-                vDiff += Vector2.Scale(col.rigidbody.velocity, secondNormal);
-            }
-            // Else the thing isn't meant to move.
-            Debug.Log("Attack angle:" + vectorOfAttack + " " + attachNormal + "; spd = " +vDiff.magnitude);
-            if (vDiff.magnitude > crashThresh)
-            {
-                Debug.Log("Squished with " + col.gameObject);
-                death();
-            }
-            else Debug.Log("But nothing happened!");
-            */
-            
+
             Vector2 vTotal = rb.velocity;
             if (pushed)
             {
@@ -262,6 +240,7 @@ public class Controls : MonoBehaviour {
             }
         }
     }
+    
 
     // placeholder death anim
     void death()
@@ -302,7 +281,7 @@ public class Controls : MonoBehaviour {
 
     void enableEX()
     {
-        bool notGoingIntendedWay = direction.normalized != rb.velocity.normalized && rb.velocity.magnitude > ctrlThresh;
+        EX.gameObject.SetActive(beingPushed);
         EX.SetBool("beingPushed", beingPushed);
     }
 
@@ -319,4 +298,43 @@ public class Controls : MonoBehaviour {
             yield return null;
         }
     }
+
+    void SetPowerIncrements(int power)
+    {
+        if (power > powerMax)
+        {
+            Debug.Log(gameObject+" already has max power!");
+            return;
+        }
+        if (power < 0)
+        {
+            powerIncrements = 0;
+            return;
+        }
+
+        powerIncrements = power;
+        UpdateScale();
+    }
+
+    void IncrementPower()
+    {
+        if (powerIncrements < powerMax)
+        {
+            SetPowerIncrements(powerIncrements + 1);
+        }
+    }
+
+    void UpdateScale()
+    {
+        if (baseScale != Vector2.one)
+        {
+            scale = baseScale + (axesEnabled(attachNormal) * powerIncrements);
+            Debug.Log(scale + " " + axesEnabled(attachNormal) * powerIncrements);
+        }
+        else
+        {
+            scale = baseScale;
+        }
+    }
 }
+
