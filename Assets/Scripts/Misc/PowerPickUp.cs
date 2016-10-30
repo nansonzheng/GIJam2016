@@ -10,6 +10,7 @@ public class PowerPickUp : MonoBehaviour {
         {
             receiver.gameObject.SendMessage("IncrementPower");
         }
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
+		GetComponent<Animator>().SetTrigger ("break");
     }
 }
