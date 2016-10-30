@@ -38,7 +38,7 @@ public class blockBehaviour : MonoBehaviour {
 	void OnCollisionExit2D(Collision2D col){
 		if (col.gameObject.CompareTag ("Player")) {
 			for(int i = 0; i < playerCollisions.Count; i++){
-				if (!playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
+				if (!(playerCollisions[i].gameObject == null) || !playerCollisions[i].gameObject.GetComponent<Controls>().alive.Value || playerCollisions[i].gameObject == col.gameObject) {
 					playerCollisions.RemoveAt(i);
 
 					//Reupdate Color
