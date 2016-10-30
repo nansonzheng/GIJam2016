@@ -100,31 +100,47 @@ public class Controls : MonoBehaviour {
         setAnimVars();
     }
 
-    // TODO: LayerMask for different objects
+
     void OnCollisionEnter2D(Collision2D col) {
         if (col.gameObject.CompareTag(this.tag))
         {
             return;
         }
-        if (!isPushing && col.rigidbody != null)
+        if (!isPushing)
         {
-            isPushing = true;
-            pushed = col.rigidbody;
-            attachNormal = col.contacts[0].normal;
-            Debug.Log("attachnormal " + attachNormal);
-            Debug.Log(attachNormal);
-            // Figure out whether pushing vertically or horizontally
-            // then make scale vector based on that
-            if (attachNormal.x == 0f)
+            // Pushable objects have rigidbody
+            if (col.rigidbody != null)
             {
-                scale.x = pushingMultiplierSide;
-                scale.y = pushingMultiplierForward;
+               isPushing = true;
+               pushed = col.rigidbody;
+               attachNormal = col.contacts[0].normal;
+               Debug.Log("attachnormal " + attachNormal);
+               Debug.Log(attachNormal);
+                // Figure out whether pushing vertically or horizontally
+                // then make scale vector based on that
+                if (attachNormal.x == 0f)
+                {
+                    scale.x = pushingMultiplierSide;
+                    scale.y = pushingMultiplierForward;
+                }
+                else if (attachNormal.y == 0f)
+                {
+                    scale.x = pushingMultiplierForward;
+                    scale.y = pushingMultiplierSide;
+                }
             }
-            else if (attachNormal.y == 0f)
+            // else wall?
+           else
             {
-                scale.x = pushingMultiplierForward;
-                scale.y = pushingMultiplierSide;
+                // change isPushing to true to enable collisions
+                // pushed remains null to indicate wall
+                // at collisionexit, col.rigidbody is null == pushed.
+                isPushing = true;
+                attachNormal = col.contacts[0].normal;
+                scale = Vector2.one;
+                Debug.Log("attack on titan");
             }
+            
         }
         // Else, probably being squished
         else
@@ -150,11 +166,11 @@ public class Controls : MonoBehaviour {
                 desu();
             }
             else Debug.Log("But nothing happened!");
-            // Shrink collider to simulate squish effect?
 
         }
     }
-		
+
+
     void OnCollisionExit2D(Collision2D col) {
         if (isPushing && col.rigidbody == pushed)
         {
