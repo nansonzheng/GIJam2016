@@ -7,7 +7,7 @@ public class blockSounds : MonoBehaviour {
     public AudioSource source;
     public AudioClip bumpSound;
 
-    void OnCollisionEnter2D(Collision col)
+    void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Wall") || col.gameObject.CompareTag("Block"))
         {
